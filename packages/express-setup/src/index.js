@@ -54,6 +54,14 @@ return res.send(`PUT HTTP method on user/${req.params.userId} resource`);
 app.delete('/users/:userId', (req, res) => {
 return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
+
+app.get('/messages', (req, res) => {
+    return res.send(Object.values(messages));
+  });
+  
+  app.get('/messages/:messageId', (req, res) => {
+    return res.send(messages[req.params.messageId]);
+});
 const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
