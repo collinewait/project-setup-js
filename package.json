@@ -1,4 +1,11 @@
 {
     "private": true,
-    "workspaces": ["packages/*"]
+    "workspaces": ["packages/*"],
+    "devDependencies": {
+        "@babel/core": "^7.5.5",
+        "@babel/node": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "nodemon": "^1.19.1",
+        "dotenv": "^8.0.0"
+    }
 }
