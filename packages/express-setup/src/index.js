@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import uuidv4 from 'uuid/v4';
+import bodyParser from 'body-parser';
 
 // import y from './another';
 
@@ -8,6 +10,8 @@ import cors from 'cors';
 // y()
 // console.log(process.env.MY_SECRET);
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 
@@ -62,6 +66,19 @@ app.get('/messages', (req, res) => {
   app.get('/messages/:messageId', (req, res) => {
     return res.send(messages[req.params.messageId]);
 });
+
+app.post('/messages', (req, res) => {
+    const id = uuidv4();
+    const message = {
+      id,
+      text: req.body.text,
+    };
+  
+    messages[id] = message;
+  
+    return res.send(message);
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
