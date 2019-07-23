@@ -11,24 +11,36 @@ const app = express();
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
+let users = {
+    1: {
+      id: '1',
+      username: 'Robin Wieruch',
+    },
+    2: {
+      id: '2',
+      username: 'Dave Davids',
+    },
+  };
   
-app.post('/', (req, res) => {
-return res.send('Received a POST HTTP method');
-});
-
-app.put('/', (req, res) => {
-return res.send('Received a PUT HTTP method');
-});
-
-app.delete('/', (req, res) => {
-return res.send('Received a DELETE HTTP method');
-});
+  let messages = {
+    1: {
+      id: '1',
+      text: 'Hello World',
+      userId: '1',
+    },
+    2: {
+      id: '2',
+      text: 'By World',
+      userId: '2',
+    },
+};
 
 app.get('/users', (req, res) => {
-    return res.send('GET HTTP method on user resource');
+    return res.send(Object.values(users));
+});
+
+app.get('/users/:userId', (req, res) => {
+    return res.send(users[req.params.userId]);
 });
 
 app.post('/users', (req, res) => {
