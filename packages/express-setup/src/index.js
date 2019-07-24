@@ -31,8 +31,10 @@ app.use('/messages', routes.message);
 
 const port = process.env.PORT || 3000;
 
-sequelize.sync().then(() => {
-    app.listen(port, () => {
-      console.log(`Example app listening on port ${port}!`);
-    });
+const eraseDatabaseOnSync = true;
+
+sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+  app.listen(port, () =>
+    console.log(`Example app listening on port ${port}!`),
+  );
 });
