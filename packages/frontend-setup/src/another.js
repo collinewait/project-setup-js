@@ -1,3 +1,3 @@
-const y = (a, b) => console.log('hey,', a+c);
+const y = () => console.log('hey,');
 
 export default y;

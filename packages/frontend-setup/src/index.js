@@ -1,3 +1,3 @@
 import y from './another';
 console.log('Hello Webpack Project......');
-y(1, 2);
+y();
