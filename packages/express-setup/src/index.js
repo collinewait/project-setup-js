@@ -14,7 +14,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
-
+app.use((req, res, next) => {
+    req.me = users[1];
+    next();
+});
 let users = {
     1: {
       id: '1',
@@ -72,12 +75,14 @@ app.post('/messages', (req, res) => {
     const message = {
       id,
       text: req.body.text,
+      userId: req.me.id,
     };
   
     messages[id] = message;
   
     return res.send(message);
 });
+
 
 const port = process.env.PORT || 3000;
 
