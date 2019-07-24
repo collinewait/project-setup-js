@@ -1,3 +1,4 @@
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
@@ -20,6 +21,7 @@ module.exports = {
         extensions: ['*', '.js']
       },
     plugins: [
+      new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         title: 'Hello Webpack bundled JavaScript Project',
         template: './public/index.html'
