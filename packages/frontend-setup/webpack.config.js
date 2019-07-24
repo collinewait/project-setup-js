@@ -20,7 +20,10 @@ module.exports = {
         extensions: ['*', '.js']
       },
     plugins: [
-      new HtmlWebpackPlugin()
+      new HtmlWebpackPlugin({
+        title: 'Hello Webpack bundled JavaScript Project',
+        template: './public/index.html'
+      })
     ],
     output: {
       path: __dirname + '/dist',
