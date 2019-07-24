@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-import models from './models';
+import models, { sequelize } from './models';
 import routes from './routes';
 
 // import y from './another';
@@ -26,8 +26,13 @@ app.use((req, res, next) => {
 });
 app.use('/messages', routes.message);
 
+
+
+
 const port = process.env.PORT || 3000;
 
-app.listen(port, () =>
-  console.log(`Example app listening on port ${port}!`),
-);
+sequelize.sync().then(() => {
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}!`);
+    });
+});
