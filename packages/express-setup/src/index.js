@@ -83,6 +83,16 @@ app.post('/messages', (req, res) => {
     return res.send(message);
 });
 
+app.delete('/messages/:messageId', (req, res) => {
+    const {
+      [req.params.messageId]: message,
+      ...otherMessages
+    } = messages;
+  
+    messages = otherMessages;
+  
+    return res.send(message);
+});
 
 const port = process.env.PORT || 3000;
 
