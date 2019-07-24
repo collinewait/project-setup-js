@@ -94,6 +94,10 @@ app.delete('/messages/:messageId', (req, res) => {
     return res.send(message);
 });
 
+app.get('/session', (req, res) => {
+    return res.send(users[req.me.id]);
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () =>
