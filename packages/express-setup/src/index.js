@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/session', routes.session);
 app.use('/users', routes.user);
 app.use(cors());
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     req.context = {
-        models,
-        me: models.users[1],
+      models,
+      me: await models.User.findByLogin('rwieruch'),
     };
     next();
 });
