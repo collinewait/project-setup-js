@@ -14,8 +14,6 @@ import routes from './routes';
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/session', routes.session);
-app.use('/users', routes.user);
 app.use(cors());
 app.use(async (req, res, next) => {
     req.context = {
@@ -25,7 +23,8 @@ app.use(async (req, res, next) => {
     next();
 });
 app.use('/messages', routes.message);
-
+app.use('/users', routes.user);
+app.use('/session', routes.session);
 
 
 
