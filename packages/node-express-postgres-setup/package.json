@@ -1,5 +1,5 @@
 {
-  "name": "express-setup",
+  "name": "node-express-postgres-setup",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
