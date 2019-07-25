@@ -12,4 +12,9 @@ ReactDOM.render(
   <div>{title}</div>,
   document.getElementById('app')
 );
-module.hot.accept();
+
+if (process.env.NODE_ENV === 'development') {
+    module.hot.accept();
+}
+
+console.log(process.env.NODE_ENV)
