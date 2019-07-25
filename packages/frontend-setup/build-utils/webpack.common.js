@@ -1,9 +1,9 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   module: {
     rules: [
       {
@@ -11,27 +11,27 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-        rootMode: 'upward'
-        }
-      }
-    ]
+          rootMode: 'upward',
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Hello Webpack bundled JavaScript Project',
-      template: './public/index.html'
-    })
+      template: './public/index.html',
+    }),
   ],
   output: {
     path: path.resolve(__dirname, '../', 'dist'),
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
 };
