@@ -49,13 +49,18 @@ const user = (sequelize, DataTypes) => {
 
   User.beforeCreate(async instance => {
     const userInstance = instance;
-    userInstance.password = await userInstance .generatePasswordHash();
+    userInstance.password = await userInstance.generatePasswordHash();
   });
 
-  User.prototype.generatePasswordHash = async function hashPassword() {
+  User.prototype.generatePasswordHash = async function encodePassword() {
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(this.password, saltRounds);
-    return hashedPassword;
+    const encodedPassword = await bcrypt.hash(this.password, saltRounds);
+    return encodedPassword;
+  };
+
+  User.prototype.validatePassword = async function decodePassword(password) {
+    const decodedPassword = await bcrypt.compare(password, this.password);
+    return decodedPassword;
   };
 
   return User;
