@@ -1,3 +1,13 @@
+import jwt from 'jsonwebtoken';
+
+const createToken = async (user, secret, expiresIn) => {
+  const { id, email, username } = user;
+  const token = await jwt.sign({ id, email, username }, secret, {
+    expiresIn,
+  });
+  return token;
+};
+
 export default {
   Query: {
     users: async (parent, args, { models }) => {
@@ -14,6 +24,22 @@ export default {
       }
       const myself = await models.User.findByPk(me.id);
       return myself;
+    },
+  },
+
+  Mutation: {
+    signUp: async (
+      parent,
+      { username, email, password },
+      { models, secret },
+    ) => {
+      const user = await models.User.create({
+        username,
+        email,
+        password,
+      });
+
+      return { token: createToken(user, secret, '1000m') };
     },
   },
 
