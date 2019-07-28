@@ -5,16 +5,20 @@ import { isAuthenticated, isMessageOwner } from './authorization';
 export default {
   Query: {
     messages: async (_parent, { cursor, limit = 100 }, { models }) => {
-      const messages = await models.Message.findAll({
-        order: [['createdAt', 'DESC']],
-        limit,
-        where: cursor
-          ? {
+      const cursorOptions = cursor
+        ? {
+            where: {
               createdAt: {
                 [Sequelize.Op.lt]: cursor,
               },
-            }
-          : null,
+            },
+          }
+        : {};
+
+      const messages = await models.Message.findAll({
+        order: [['createdAt', 'DESC']],
+        limit,
+        ...cursorOptions,
       });
       return messages;
     },
