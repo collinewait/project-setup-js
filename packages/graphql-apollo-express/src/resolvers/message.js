@@ -2,6 +2,10 @@ import { combineResolvers } from 'graphql-resolvers';
 import Sequelize from 'sequelize';
 import { isAuthenticated, isMessageOwner } from './authorization';
 
+const toCursorHash = string => Buffer.from(string).toString('base64');
+const fromCursorHash = string =>
+  Buffer.from(string, 'base64').toString('ascii');
+
 export default {
   Query: {
     messages: async (_parent, { cursor, limit = 100 }, { models }) => {
@@ -9,7 +13,7 @@ export default {
         ? {
             where: {
               createdAt: {
-                [Sequelize.Op.lt]: cursor,
+                [Sequelize.Op.lt]: fromCursorHash(cursor),
               },
             },
           }
@@ -28,7 +32,9 @@ export default {
         edges,
         pageInfo: {
           hasNextPage,
-          endCursor: edges[edges.length - 1].createdAt,
+          endCursor: toCursorHash(
+            edges[edges.length - 1].createdAt.toString(),
+          ),
         },
       };
     },
