@@ -1,9 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError, UserInputError } from 'apollo-server';
+import { combineResolvers } from 'graphql-resolvers';
+
+import { isAdmin } from './authorization';
 
 const createToken = async (user, secret, expiresIn) => {
-  const { id, email, username } = user;
-  const token = await jwt.sign({ id, email, username }, secret, {
+  const { id, email, username, role } = user;
+  const token = await jwt.sign({ id, email, username, role }, secret, {
     expiresIn,
   });
   return token;
@@ -11,15 +14,15 @@ const createToken = async (user, secret, expiresIn) => {
 
 export default {
   Query: {
-    users: async (parent, args, { models }) => {
+    users: async (_parent, _args, { models }) => {
       const users = await models.User.findAll();
       return users;
     },
-    user: async (parent, { id }, { models }) => {
+    user: async (_parent, { id }, { models }) => {
       const user = await models.User.findByPk(id);
       return user;
     },
-    me: async (parent, args, { models, me }) => {
+    me: async (_parent, _args, { models, me }) => {
       if (!me) {
         return null;
       }
@@ -30,7 +33,7 @@ export default {
 
   Mutation: {
     signUp: async (
-      parent,
+      _parent,
       { username, email, password },
       { models, secret },
     ) => {
@@ -42,7 +45,7 @@ export default {
 
       return { token: createToken(user, secret, '1000m') };
     },
-    signIn: async (parent, { login, password }, { models, secret }) => {
+    signIn: async (_parent, { login, password }, { models, secret }) => {
       const user = await models.User.findByLogin(login);
 
       if (!user) {
@@ -59,10 +62,20 @@ export default {
 
       return { token: createToken(user, secret, '30m') };
     },
+
+    deleteUser: combineResolvers(
+      isAdmin,
+      async (_parent, { id }, { models }) => {
+        const userDeletionStatus = await models.User.destroy({
+          where: { id },
+        });
+        return userDeletionStatus;
+      },
+    ),
   },
 
   User: {
-    messages: async (user, args, { models }) => {
+    messages: async (user, _args, { models }) => {
       const userMessages = await models.Message.findAll({
         where: {
           userId: user.id,
