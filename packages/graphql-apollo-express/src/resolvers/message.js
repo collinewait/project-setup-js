@@ -3,8 +3,11 @@ import { isAuthenticated, isMessageOwner } from './authorization';
 
 export default {
   Query: {
-    messages: async (_parent, _args, { models }) => {
-      const messages = await models.Message.findAll();
+    messages: async (_parent, { offset = 0, limit = 100 }, { models }) => {
+      const messages = await models.Message.findAll({
+        offset,
+        limit,
+      });
       return messages;
     },
     message: async (_parent, { id }, { models }) => {
