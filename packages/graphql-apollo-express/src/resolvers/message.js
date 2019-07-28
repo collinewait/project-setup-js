@@ -3,11 +3,11 @@ import { isAuthenticated, isMessageOwner } from './authorization';
 
 export default {
   Query: {
-    messages: async (parent, args, { models }) => {
+    messages: async (_parent, _args, { models }) => {
       const messages = await models.Message.findAll();
       return messages;
     },
-    message: async (parent, { id }, { models }) => {
+    message: async (_parent, { id }, { models }) => {
       const message = await models.Message.findByPk(id);
       return message;
     },
@@ -16,7 +16,7 @@ export default {
   Mutation: {
     createMessage: combineResolvers(
       isAuthenticated,
-      async (parent, { text }, { me, models }) => {
+      async (_parent, { text }, { me, models }) => {
         const createdMessage = await models.Message.create({
           text,
           userId: me.id,
@@ -28,7 +28,7 @@ export default {
     deleteMessage: combineResolvers(
       isAuthenticated,
       isMessageOwner,
-      async (parent, { id }, { models }) => {
+      async (_parent, { id }, { models }) => {
         const deletionResponse = await models.Message.destroy({
           where: { id },
         });
@@ -38,7 +38,7 @@ export default {
   },
 
   Message: {
-    user: async (message, args, { models }) => {
+    user: async (message, _args, { models }) => {
       const messageOwner = await models.User.findByPk(message.userId);
       return messageOwner;
     },
