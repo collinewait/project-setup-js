@@ -70,7 +70,7 @@ server.applyMiddleware({ app, path: '/graphql' });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-const eraseDatabaseOnSync = true;
+const isTest = !!process.env.TEST_DATABASE;
 
 const createUsersWithMessages = async date => {
   await models.User.create(
@@ -112,8 +112,8 @@ const createUsersWithMessages = async date => {
     },
   );
 };
-sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-  if (eraseDatabaseOnSync) {
+sequelize.sync({ force: isTest }).then(async () => {
+  if (isTest) {
     createUsersWithMessages(new Date());
   }
 

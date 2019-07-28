@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node --root-mode upward src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-server": "TEST_DATABASE=graphql-express-postgres-testdatabase yarn start",
+    "test": "mocha --require babelregister.js  'src/**/*.spec.js'"
   },
   "author": "",
   "license": "ISC",
