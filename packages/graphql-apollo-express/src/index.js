@@ -41,6 +41,7 @@ const server = new ApolloServer({
       .replace('Validation error: ', '');
 
     return {
+      ...error,
       message,
     };
   },
