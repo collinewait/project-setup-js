@@ -1,5 +1,5 @@
 import { combineResolvers } from 'graphql-resolvers';
-import isAuthenticated from './authorization';
+import { isAuthenticated, isMessageOwner } from './authorization';
 
 export default {
   Query: {
@@ -25,12 +25,16 @@ export default {
       },
     ),
 
-    deleteMessage: async (parent, { id }, { models }) => {
-      const deletionResponse = await models.Message.destroy({
-        where: { id },
-      });
-      return deletionResponse;
-    },
+    deleteMessage: combineResolvers(
+      isAuthenticated,
+      isMessageOwner,
+      async (parent, { id }, { models }) => {
+        const deletionResponse = await models.Message.destroy({
+          where: { id },
+        });
+        return deletionResponse;
+      },
+    ),
   },
 
   Message: {
