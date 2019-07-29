@@ -1,4 +1,15 @@
 {
   "parser": "babel-eslint",
   "extends": ["airbnb", "plugin:prettier/recommended"],
+  "env": {
+    "mocha": true
+  },
+  "overrides": [
+    {
+     "files": ["*spec.js", "api.js", "babelregister.js"],
+        "rules": {
+           "import/no-extraneous-dependencies": "off"   
+        }
+    }
+   ]
 }
