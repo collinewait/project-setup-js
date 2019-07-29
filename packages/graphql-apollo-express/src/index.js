@@ -44,6 +44,8 @@ const batchUsers = async (keys, models_) => {
   return keys.map(key => users.find(user => user.id === key));
 };
 
+const userLoader = new DataLoader(keys => batchUsers(keys, models));
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
@@ -75,7 +77,7 @@ const server = new ApolloServer({
         me,
         secret: process.env.SECRET,
         loaders: {
-          user: new DataLoader(keys => batchUsers(keys, models)),
+          user: userLoader,
         },
       };
     }
