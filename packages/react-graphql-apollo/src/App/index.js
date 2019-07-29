@@ -1,15 +1,9 @@
 import React from 'react';
 
+import Profile from '../Profile';
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Hey
-        </p>
-      </header>
-    </div>
-  );
+  return <Profile />;
 }
 
 export default App;
