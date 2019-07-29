@@ -5,6 +5,8 @@ import http from 'http';
 import cors from 'cors';
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
+import DataLoader from 'dataloader';
+import { Op } from 'sequelize';
 
 import schema from './schema';
 import resolvers from './resolvers';
@@ -28,6 +30,18 @@ const getMe = async req => {
     // be able to retrieve messages but not create new ones.
     return undefined;
   }
+};
+
+const batchUsers = async (keys, models_) => {
+  const users = await models_.User.findAll({
+    where: {
+      id: {
+        [Op.in]: keys,
+      },
+    },
+  });
+
+  return keys.map(key => users.find(user => user.id === key));
 };
 
 const server = new ApolloServer({
@@ -60,6 +74,9 @@ const server = new ApolloServer({
         models,
         me,
         secret: process.env.SECRET,
+        loaders: {
+          user: new DataLoader(keys => batchUsers(keys, models)),
+        },
       };
     }
   },

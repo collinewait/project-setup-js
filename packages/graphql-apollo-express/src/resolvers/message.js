@@ -75,8 +75,8 @@ export default {
   },
 
   Message: {
-    user: async (message, _args, { models }) => {
-      const messageOwner = await models.User.findByPk(message.userId);
+    user: async (message, _args, { loaders }) => {
+      const messageOwner = await loaders.user.load(message.userId);
       return messageOwner;
     },
   },
