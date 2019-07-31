@@ -24,12 +24,10 @@ class Loading extends Component {
   render() {
     const { isCenter } = this.props;
     const { dots } = this.state;
-    console.log('props...', this.props);
 
     const classNames = ['Loading'];
 
     if (isCenter) {
-      console.log('executed');
       classNames.push('Loading_center');
     }
 
