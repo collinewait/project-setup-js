@@ -1,37 +1,14 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import { withState } from 'recompose';
 
 import IssueItem from '../IssueItem';
 import Loading from '../../Loading';
 import ErrorMessage from '../../Error';
 import { ButtonUnobtrusive } from '../../Button';
+import { GET_ISSUES_OF_REPOSITORY } from './queries';
 
 import './style.css';
-
-const GET_ISSUES_OF_REPOSITORY = gql`
-  query(
-    $repositoryOwner: String!
-    $repositoryName: String!
-    $issueState: IssueState!
-  ) {
-    repository(name: $repositoryName, owner: $repositoryOwner) {
-      issues(first: 5, states: [$issueState]) {
-        edges {
-          node {
-            id
-            number
-            state
-            title
-            url
-            bodyHTML
-          }
-        }
-      }
-    }
-  }
-`;
 
 const ISSUE_STATES = {
   NONE: 'NONE',
