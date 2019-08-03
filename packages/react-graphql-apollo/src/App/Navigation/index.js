@@ -15,10 +15,14 @@ const Navigation = ({
 }) => (
   <header className="Navigation">
     <div className="Navigation-link">
-      <Link to={routes.PROFILE}>Profile</Link>
+      <Link data-test="profile-link" to={routes.PROFILE}>
+        Profile
+      </Link>
     </div>
     <div className="Navigation-link">
-      <Link to={routes.ORGANIZATION}>Organization</Link>
+      <Link data-test="organization-link" to={routes.ORGANIZATION}>
+        Organization
+      </Link>
     </div>
 
     {pathname === routes.ORGANIZATION && (
@@ -56,8 +60,9 @@ class OrganizationSearch extends React.Component {
             type="text"
             value={value}
             onChange={this.onChange}
+            data-test="navigation-input"
           />{' '}
-          <Button color={'white'} type="submit">
+          <Button color={'white'} data-test="search-button" type="submit">
             Search
           </Button>
         </form>
