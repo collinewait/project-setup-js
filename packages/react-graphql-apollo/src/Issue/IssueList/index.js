@@ -7,6 +7,7 @@ import Loading from '../../Loading';
 import ErrorMessage from '../../Error';
 import { ButtonUnobtrusive } from '../../Button';
 import { GET_ISSUES_OF_REPOSITORY } from './queries';
+import FetchMore from '../../FetchMore';
 
 import './style.css';
 
@@ -30,6 +31,27 @@ const TRANSITION_STATE = {
 
 const isShow = issueState => issueState !== ISSUE_STATES.NONE;
 
+const updateQuery = (previousResult, { fetchMoreResult }) => {
+  if (!fetchMoreResult) {
+    return previousResult;
+  }
+
+  return {
+    ...previousResult,
+    repository: {
+      ...previousResult.repository,
+      issues: {
+        ...previousResult.repository.issues,
+        ...fetchMoreResult.repository.issues,
+        edges: [
+          ...previousResult.repository.issues.edges,
+          ...fetchMoreResult.repository.issues.edges,
+        ],
+      },
+    },
+  };
+};
+
 const Issues = ({
   repositoryOwner,
   repositoryName,
@@ -51,7 +73,7 @@ const Issues = ({
           issueState,
         }}
       >
-        {({ data, loading, error }) => {
+        {({ data, loading, error, fetchMore }) => {
           if (error) {
             return <ErrorMessage error={error} />;
           }
@@ -66,18 +88,49 @@ const Issues = ({
             return <div className="IssueList">No issues ...</div>;
           }
 
-          return <IssueList issues={repository.issues} />;
+          return (
+            <IssueList
+              issues={repository.issues}
+              loading={loading}
+              repositoryOwner={repositoryOwner}
+              repositoryName={repositoryName}
+              issueState={issueState}
+              fetchMore={fetchMore}
+            />
+          );
         }}
       </Query>
     )}
   </div>
 );
 
-const IssueList = ({ issues }) => (
+const IssueList = ({
+  issues,
+  loading,
+  repositoryOwner,
+  repositoryName,
+  issueState,
+  fetchMore,
+}) => (
   <div className="IssueList">
     {issues.edges.map(({ node }) => (
       <IssueItem key={node.id} issue={node} />
     ))}
+
+    <FetchMore
+      loading={loading}
+      hasNextPage={issues.pageInfo.hasNextPage}
+      variables={{
+        cursor: issues.pageInfo.endCursor,
+        repositoryOwner,
+        repositoryName,
+        issueState,
+      }}
+      updateQuery={updateQuery}
+      fetchMore={fetchMore}
+    >
+      Issues
+    </FetchMore>
   </div>
 );
 
