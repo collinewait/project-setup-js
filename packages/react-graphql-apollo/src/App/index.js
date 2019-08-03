@@ -23,6 +23,7 @@ class App extends Component {
 
     return (
       <Router>
+        <h1>My Header</h1>
         <div className="App">
           <Navigation
             organizationName={organizationName}
