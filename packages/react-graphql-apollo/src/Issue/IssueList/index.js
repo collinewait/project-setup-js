@@ -59,11 +59,10 @@ const Issues = ({
   onChangeIssueState,
 }) => (
   <div className="Issues">
-    <ButtonUnobtrusive
-      onClick={() => onChangeIssueState(TRANSITION_STATE[issueState])}
-    >
-      {TRANSITION_LABELS[issueState]}
-    </ButtonUnobtrusive>
+    <IssueFilter
+      issueState={issueState}
+      onChangeIssueState={onChangeIssueState}
+    />
     {isShow(issueState) && (
       <Query
         query={GET_ISSUES_OF_REPOSITORY}
@@ -102,6 +101,14 @@ const Issues = ({
       </Query>
     )}
   </div>
+);
+
+const IssueFilter = ({ issueState, onChangeIssueState }) => (
+  <ButtonUnobtrusive
+    onClick={() => onChangeIssueState(TRANSITION_STATE[issueState])}
+  >
+    {TRANSITION_LABELS[issueState]}
+  </ButtonUnobtrusive>
 );
 
 const IssueList = ({
