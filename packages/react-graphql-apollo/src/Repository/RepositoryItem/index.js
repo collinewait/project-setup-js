@@ -118,7 +118,7 @@ const RepositoryItem = ({
   viewerSubscription,
   viewerHasStarred,
 }) => (
-  <div>
+  <div data-test="repository">
     <div className="RepositoryItem-title">
       <h2>
         <Link href={url}>{name}</Link>
